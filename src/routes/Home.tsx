@@ -1,32 +1,30 @@
-import React, { ReactHTMLElement, useState } from "react";
+import React, { useState } from "react";
+import { addToDo, addUser } from "../store/configureStore";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 const Home = () => {
+  const toDos = useAppSelector((state) => state.toDo.value);
   const [text, setText] = useState("");
-  const [toDos, setToDos] = useState<string[]>([]);
-  const onSubmit = (e: React.FormEvent) => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(e);
-    setToDos((oldToDos) => [...oldToDos, text]);
+    dispatch(addUser({ id: 1, toDo: "sad", date: "asd" }));
   };
   return (
     <>
       <h1>ToDoList</h1>
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => {
-            setText(e.currentTarget.value);
-          }}
-        />
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={text} onChange={(e) => setText(e.currentTarget.value)} />
         <button>등록</button>
       </form>
       <ul>
-        {toDos.map((todo) => (
-          <li>{todo}</li>
+        {toDos.map((toDo) => (
+          <li key={toDo.id}>{toDo.toDo}</li>
         ))}
       </ul>
     </>
   );
 };
+
 export default Home;
